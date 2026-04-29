@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar';
-
+import Modal from '../components/Modal';
 
 const Menu = () => {
+  const [isOpen, SetIsOpen] = useState({
+    id: null,
+    isActive: false,
+  });
+  const [qty, setQty] = useState(0)
+
+  const addQTY = () => {
+    setQty(qty + 1)
+  }
+  const minQTY = () => {
+    if (qty > 0) {
+      setQty(qty - 1)
+    }
+  }
+
+
   return (
     <div className='bg-blue-200 w-screen h-screen lg:p-10'>
       <Navbar></Navbar>
@@ -70,7 +86,14 @@ const Menu = () => {
 
           </div>
           <div className="grid grid-cols-12 w-full h-full lg:p-10 gap-5">
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
@@ -146,6 +169,58 @@ const Menu = () => {
         </div>
       </div>
 
+      {/* Modal station */}
+
+      <Modal isOpen={isOpen.isActive} onClose={() => SetIsOpen(false)} title="Add Bill" >
+        <div className="flex flex-col justify-center items-center gap-5">
+          <div className="w-35 h-35 bg-gray-300 rounded-2xl"></div>
+          <h1 className='text-2xl font-mono '>Americano</h1>
+        </div>
+        <>
+          <h1 className='text-xl font-bold font-mmono'>Sugar</h1>
+          <div className="flex justify-between">
+            <div className=" flex gap-5 text-xl mt-5 justify-center items-center">
+              <input type="checkbox" name="lessSGR" id="lessSGR" className='w-5 h-5' />
+              <label htmlFor="lessSGR"> Less</label>
+            </div>
+            <div className=" flex gap-5 text-xl mt-5 justify-center items-center">
+              <input type="checkbox" name="lessSGR" id="lessSGR" className='w-5 h-5' />
+              <label htmlFor="lessSGR"> More</label>
+            </div>
+          </div>
+        </>
+        <div className='mt-5'>
+          <h1 className='text-xl font-bold font-mmono'>Ice</h1>
+          <div className="flex justify-between">
+            <div className=" flex gap-5 text-xl mt-5 justify-center items-center">
+              <input type="checkbox" name="lessSGR" id="lessSGR" className='w-5 h-5' />
+              <label htmlFor="lessSGR"> Less</label>
+            </div>
+            <div className=" flex gap-5 text-xl mt-5 justify-center items-center">
+              <input type="checkbox" name="lessSGR" id="lessSGR" className='w-5 h-5' />
+              <label htmlFor="lessSGR"> More</label>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-center items-center">
+          <div className="w-40 h-20 flex justify-between mt-5 items-center">
+            <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer hover:bg-gray-400 transition-colors duration-300"
+            onClick={()=> {
+              minQTY()
+            }}
+            >-</div>
+            <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer">{qty}</div>
+            <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer hover:bg-gray-400 transition-colors duration-300"
+              onClick={() => {
+                addQTY()
+              }}
+            >+</div>
+          </div>
+
+          <button type="submit" className='bg-fuchsia-500 w-50 h-10 text-white font-mono font-bold rounded-3xl cursor-pointer hover:bg-blue-200 hover:text-black transition-colors duration-300'>Add</button>
+        </div>
+      </Modal>
 
     </div >
   )
