@@ -1,21 +1,23 @@
 import React from 'react'
+import Navbar from '../components/Navbar';
+
 
 const Menu = () => {
   return (
     <div className='bg-blue-200 w-screen h-screen lg:p-10'>
+      <Navbar></Navbar>
       <div className="grid grid-cols-12 lg:visible w-full h-full gap-10">
-        <div className="col-span-3 bg-white w-full h-full rounded-2xl p-5 flex flex-col items-center justify-start gap-10">
-          <input type="text" name="searchMenu" className='w-full h-10 bg-blue-300 p-5 rounded-2xl' placeholder='Search Menu' id="" />
+        <div className="col-span-3 bg-white ml-15 w-110 h-full rounded-2xl p-5 flex flex-col items-center justify-start gap-10">
 
           <h1 className='text-4xl font-mono font-bold'>Pesanan</h1>
 
-          <div className="flex flex-col w-full h-120 justify-start p-5 overflow-y-scroll gap-5 border-solid border-3 border-olive-200 rounded-tl-4xl rounded-bl-4xl">
+          <div className="flex flex-col w-full h-140 justify-start p-5 overflow-y-scroll gap-5 border-solid border-3 border-olive-200 rounded-tl-4xl rounded-bl-4xl">
             <div className="flex flex-col w-full h-fit">
               <div className="  w-full h-15 rounded-4xl flex justify-between items-center gap-5 px-2 py-2 ">
                 <h1 className='font-bold text-black text-lg'>5X</h1>
                 <div className="w-0.5 h-full bg-black opacity-40 "></div>
-                <div className="w-13 h-13 bg-gray-600 rounded-2xl"></div>
-                <h1 className='font-mono text-xl font-bold'>Americano</h1>
+                <div className="w-10 h-10 bg-gray-600 rounded-2xl"></div>
+                <h1 className='font-mono text-lg font-bold'>Americano</h1>
                 <h1 className='font-mono text-lg'>RP.60.000</h1>
               </div>
               <div className="w-full h-0.5 bg-black opacity-30 mt-2 mb-2"></div>
@@ -52,6 +54,21 @@ const Menu = () => {
 
         </div>
         <div className="col-span-9 bg-white w-full h-full rounded-2xl overflow-y-scroll">
+          <div className="gap-5 w-full  h-15 grid grid-cols-12 px-15 py-5 ">
+            <div className="col-span-8 w-full flex justify-between gap-5">
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Tea</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Coffee</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Milk Shake</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Pastries</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Snack</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Havy Meal</div>
+              <div className="w-fit h-15 px-5 rounded-2xl bg-blue-200 text-center font-bold  text-xl flex justify-center items-center">Others</div>
+            </div>
+            <div className="col-span-4">
+              <input type="text" name="searchMenu" className='w-full h-15 text-xl font-mono bg-blue-100 p-5 rounded-2xl' placeholder='Search Menu' id="" />
+            </div>
+
+          </div>
           <div className="grid grid-cols-12 w-full h-full lg:p-10 gap-5">
             <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer ">
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
