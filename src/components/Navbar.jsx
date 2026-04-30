@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
   ClockIcon,
@@ -23,14 +24,16 @@ const MoonStarIcon = ({ className }) => (
 );
 
 const menuItems = [
-  { name: 'Home', icon: HomeIcon, id: 1 },
-  { name: 'History', icon: ClockIcon, id: 2 },
-  { name: 'Reports', icon: ChartBarIcon, id: 3 },
+  { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu' },
+  { name: 'History', icon: ClockIcon, id: 2, path: '/History' },
+  { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings' },
   { name: 'Staff', icon: UserIcon, id: 4 },
 ];
 
-const Navbar = () => {
-  const [activeItemId, setActiveItemId] = useState(1);
+const Navbar = ({pageID}) => {
+  const navigate = useNavigate()
+  const [activeItemId, setActiveItemId] = useState(pageID);
+  
 
   return (
     <div className="flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 absolute left-0 top-0">
@@ -42,10 +45,14 @@ const Navbar = () => {
           {menuItems.map((item) => (
             <li key={item.id}>
               <button
-                onClick={() => setActiveItemId(item.id)}
+                onClick={() => {
+                  setActiveItemId(item.id),
+                  navigate(item.path)
+                }}
+
                 className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-200
                   ${activeItemId === item.id
-                    ? 'bg-sky-200 text-sky-900 shadow-inner'
+                    ? 'bg-sky-200 text-sky-900 shadow-inner '
                     : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
                   }
                 `}

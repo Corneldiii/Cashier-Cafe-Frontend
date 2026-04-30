@@ -98,7 +98,7 @@ const Menu = () => {
 
   return (
     <div className='bg-blue-200 w-screen h-screen lg:p-10'>
-      <Navbar></Navbar>
+      <Navbar pageID={1} ></Navbar>
       <div className="grid grid-cols-12 lg:visible w-full h-full gap-10">
         <div className="col-span-3 bg-white ml-15 w-110 h-full rounded-2xl p-5 flex flex-col items-center justify-start gap-10">
 

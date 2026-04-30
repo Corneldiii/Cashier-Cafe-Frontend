@@ -50,7 +50,7 @@ const Sellings = () => {
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar pageID={3}></Navbar>
 
       <div className="w-screen h-screen overflow-y-scroll overflow-x-hidden">
         <div className="w-[96%] ml-20 h-full">
