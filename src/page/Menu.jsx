@@ -7,15 +7,92 @@ const Menu = () => {
     id: null,
     isActive: false,
   });
-  const [qty, setQty] = useState(0)
+  const [qty, setQty] = useState(1);
+  const [cart, setCart] = useState([]);
 
   const addQTY = () => {
     setQty(qty + 1)
   }
   const minQTY = () => {
-    if (qty > 0) {
+    if (qty > 1) {
       setQty(qty - 1)
     }
+  }
+
+  const addCart = (menu, qty) => {
+    let itemExists = false;
+
+    const updatedCart = cart.map((item) => {
+      if (item.id === menu.id) {
+        itemExists = true;
+
+        const newQty = item.qty + qty;
+        const newSumPrice = calculateItemPrice(newQty, item.price);
+
+        return {
+          ...item,
+          qty: newQty,
+          sumPrice: newSumPrice,
+        };
+      }
+      return item;
+    });
+
+    if (!itemExists) {
+      const sumPrice = calculateItemPrice(qty, menu.price);
+
+      updatedCart.push({
+        id: menu.id,
+        name: menu.name,
+        qty: qty,
+        price: menu.price,
+        sumPrice: sumPrice,
+      });
+    }
+
+    setCart(updatedCart);
+  };
+
+  const calculateItemPrice = (qty, price) => {
+    const sumPrice = qty * price;
+    return sumPrice;
+  }
+
+  const removeCart = (id,price) => {
+
+    const updateCart = cart.map(item => {
+      if(item.id === id){
+        const newQTY = item.qty -1;
+
+        return {
+          ...item,
+          qty : newQTY,
+          sumPrice : item.sumPrice - price
+        }
+
+      }
+      return item;
+    })
+
+    setCart(updateCart)
+  }
+
+  const calucalateAllItems = () => {
+    let totalAmount = 0;
+    cart.map(item => {
+      totalAmount = totalAmount + item.sumPrice;
+    })
+    return totalAmount;
+  }
+
+  const calucalateAfterTax = (subPrice) =>{
+    let totalTax = 0;
+    let afterTax =0;
+
+    totalTax = 0.11 * subPrice;
+    afterTax = subPrice + totalTax
+
+    return afterTax;
   }
 
 
@@ -51,20 +128,16 @@ const Menu = () => {
             </div>
             <div className="w-full h-0.5 bg-black opacity-30 mt-5 mb-5"></div>
             <div className="font-mono text-2xl  flex justify-between">
-              <h1>Sub Total</h1>
-              <h1>Rp 120.000</h1>
-            </div>
-            <div className="font-mono text-2xl  flex justify-between">
               <h1>Tax(10%)</h1>
               <h1>Rp 12.000</h1>
             </div>
-
-            <button type="submit" className='w-full h-15 rounded-2xl bg-blue-200 text-white text-center mt-10 mb-5 text-3xl font-bold cursor-pointer hover:bg-blue-500 transition-colors duration-300'> Proceed To Payment</button>
-            <div className="font-mono text-2xl  flex justify-center item-center gap-5">
-              <h1>Total: </h1>
-              <h1>Rp 112.000</h1>
+            <div className="font-mono text-2xl  flex justify-between">
+              <h1>Grand Total</h1>
+              <h1>Rp 132.000</h1>
             </div>
 
+            <button type="submit" className='w-full h-15 rounded-2xl bg-blue-200 text-white text-center mt-10 mb-5 text-3xl font-bold cursor-pointer hover:bg-blue-500 transition-colors duration-300'> Proceed To Payment</button>
+            
 
           </div>
 
@@ -86,7 +159,7 @@ const Menu = () => {
 
           </div>
           <div className="grid grid-cols-12 w-full h-full lg:p-10 gap-5">
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
               onClick={() => {
                 SetIsOpen({
                   id: null,
@@ -98,71 +171,163 @@ const Menu = () => {
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
-            <div id='content-menu' className="col-span-3 bg-blue-300 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow delay-100 cursor-pointer ">
+            <div id='content-menu' className="col-span-3 bg-blue-50 lg:h-80 lg:w-80 rounded-2xl flex flex-col items-center justify-center hover:shadow-2xl transition-shadow duration-300 cursor-pointer "
+              onClick={() => {
+                SetIsOpen({
+                  id: null,
+                  isActive: true
+                })
+              }}
+            >
               <div className="bg-white lg:h-40 lg:w-40 rounded-full"></div>
               <h1 className='font-mono text-3xl mt-10 font-bold'>Americano</h1>
               <h1 className='text-xl font-mono '>Rp. 12.000</h1>
             </div>
+
 
           </div>
 
@@ -206,9 +371,9 @@ const Menu = () => {
         <div className="flex flex-col justify-center items-center">
           <div className="w-40 h-20 flex justify-between mt-5 items-center">
             <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer hover:bg-gray-400 transition-colors duration-300"
-            onClick={()=> {
-              minQTY()
-            }}
+              onClick={() => {
+                minQTY()
+              }}
             >-</div>
             <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer">{qty}</div>
             <div className="w-10 h-10 flex justify-center items-center text-2xl font-bold border-4 border-solid cursor-pointer hover:bg-gray-400 transition-colors duration-300"
