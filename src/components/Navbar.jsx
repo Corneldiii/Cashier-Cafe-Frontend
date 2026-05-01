@@ -6,6 +6,7 @@ import {
   ChartBarIcon,
   UserIcon,
   Cog6ToothIcon,
+  CubeIcon,
 } from '@heroicons/react/24/outline';
 
 const MoonStarIcon = ({ className }) => (
@@ -25,7 +26,7 @@ const MoonStarIcon = ({ className }) => (
 
 const menuItems = [
   { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu' },
-  { name: 'History', icon: ClockIcon, id: 2, path: '/History' },
+  { name: 'History', icon: CubeIcon, id: 2, path: '/Storage' },
   { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings' },
   { name: 'Staff', icon: UserIcon, id: 4 },
 ];
@@ -36,7 +37,7 @@ const Navbar = ({pageID}) => {
   
 
   return (
-    <div className="flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 absolute left-0 top-0">
+    <div className="flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 fixed left-0 top-0">
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-800">
         <MoonStarIcon className="h-7 w-7" />
       </div>

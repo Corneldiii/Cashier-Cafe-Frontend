@@ -36,7 +36,7 @@ const data = [
 
 const Sellings = () => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Sellings = () => {
       <div className="w-screen h-screen overflow-y-scroll overflow-x-hidden">
         <div className="w-[96%] ml-20 h-full">
 
-          <div className="w-[90%] h-25 mt-20 bg-sky-400 p-5 flex justify-between items-center">
+          <div className="w-[90%] h-25 mt-10 bg-sky-400 p-5 flex justify-between items-center">
 
             <div className="flex gap-10 justify-start items-center">
               <h1 className='text-7xl font-extrabold text-white'>D A I L Y </h1>
