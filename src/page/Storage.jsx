@@ -3,6 +3,14 @@ import Navbar from '../components/Navbar'
 import {
   CubeIcon,
 } from '@heroicons/react/24/outline';
+import Table from "../components/table/Table";
+import { columns } from "../components/table/Columns";
+
+const data = [
+    { name: "Coffee Beans", stock: 20, category: "Raw Material" },
+    { name: "Milk", stock: 10, category: "Dairy" },
+    { name: "Sugar", stock: 5, category: "Ingredients" },
+  ];
 
 const Storage = () => {
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -93,7 +101,9 @@ const Storage = () => {
             <div className="row-span-10 mt-10">
               <div className="w-full h-full grid grid-cols-12 gap-10 p-5">
                 <div className="col-span-9 ">
-                  <div className="w-full h-250 shadow-2xl border-4 border-solid border-black/5 rounded-3xl"></div>
+                  <div className="w-full h-250 shadow-2xl border-4 border-solid border-black/5 rounded-3xl">
+                  
+                  </div>
                 </div>
                 <div className="col-span-3 flex flex-col gap-10 ">
                   <div className="w-full h-fit shadow-2xl border-4 border-solid border-black/5 rounded-3xl flex flex-col gap-5 p-5">

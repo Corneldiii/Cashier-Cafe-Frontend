@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.2.4",
+    "@tanstack/react-table": "^8.21.3",
     "flowbite": "^4.0.1",
     "flowbite-react": "^0.12.17",
     "lucide-react": "^1.14.0",

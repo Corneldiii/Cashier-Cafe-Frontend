@@ -7,6 +7,7 @@ import {
   UserIcon,
   Cog6ToothIcon,
   CubeIcon,
+  FireIcon,
 } from '@heroicons/react/24/outline';
 
 const MoonStarIcon = ({ className }) => (
@@ -28,7 +29,7 @@ const menuItems = [
   { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu' },
   { name: 'History', icon: CubeIcon, id: 2, path: '/Storage' },
   { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings' },
-  { name: 'Staff', icon: UserIcon, id: 4 },
+  { name: 'Kitchen', icon: FireIcon, id: 4, path:'/Kitchen' },
 ];
 
 const Navbar = ({pageID}) => {
