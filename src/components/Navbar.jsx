@@ -8,6 +8,9 @@ import {
   Cog6ToothIcon,
   CubeIcon,
   FireIcon,
+  UsersIcon,
+  Bars3Icon, // Ditambahkan untuk icon Hamburger
+  XMarkIcon  // Ditambahkan untuk icon Close
 } from '@heroicons/react/24/outline';
 
 const MoonStarIcon = ({ className }) => (
@@ -30,48 +33,71 @@ const menuItems = [
   { name: 'History', icon: CubeIcon, id: 2, path: '/Storage' },
   { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings' },
   { name: 'Kitchen', icon: FireIcon, id: 4, path:'/Kitchen' },
+  { name: 'Users', icon: UsersIcon, id: 5, path:'/Users' },
 ];
 
 const Navbar = ({pageID}) => {
   const navigate = useNavigate()
   const [activeItemId, setActiveItemId] = useState(pageID);
-  
+  const [isOpen, setIsOpen] = useState(false); // State baru untuk hamburger menu
 
   return (
-    <div className="flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 fixed left-0 top-0">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-800">
-        <MoonStarIcon className="h-7 w-7" />
-      </div>
-      <nav className="flex-1 pt-16">
-        <ul className="flex flex-col items-center space-y-7">
-          {menuItems.map((item) => (
-            <li key={item.id}>
-              <button
-                onClick={() => {
-                  setActiveItemId(item.id),
-                  navigate(item.path)
-                }}
+    <>
+      {/* Tombol Hamburger: Muncul HANYA di layar kecil (HP) */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed top-4 left-4 z-50 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-md border border-slate-200 text-slate-500 md:hidden"
+      >
+        {isOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
+      </button>
 
-                className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-200
-                  ${activeItemId === item.id
-                    ? 'bg-sky-200 text-sky-900 shadow-inner '
-                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
-                  }
-                `}
-              >
-                <item.icon className="h-7 w-7" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Background Overlay transparan untuk menutup menu ketika layar diluar sidebar di klik (Mobile Only) */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-black/20 md:hidden" 
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
-      <div className="text-slate-500 transition-colors hover:text-slate-900">
-        <button className="flex h-14 w-14 items-center justify-center rounded-2xl hover:bg-slate-100">
-          <Cog6ToothIcon className="h-7 w-7" />
-        </button>
+      {/* Sidebar Utama: Ditambahkan efek transisi slide (translate-x) untuk HP, dan tetap normal (md:translate-x-0) di PC */}
+      <div className={`fixed left-0 top-0 z-40 flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        
+        {/* Margin top ditambahkan sedikit di versi HP (mt-12) agar tidak tertabrak tombol X */}
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-800 mt-12 md:mt-0">
+          <MoonStarIcon className="h-7 w-7" />
+        </div>
+        
+        <nav className="flex-1 pt-16">
+          <ul className="flex flex-col items-center space-y-7">
+            {menuItems.map((item) => (
+              <li key={item.id}>
+                <button
+                  onClick={() => {
+                    setActiveItemId(item.id);
+                    navigate(item.path);
+                    setIsOpen(false); // Menutup sidebar otomatis saat menu dipilih di HP
+                  }}
+                  className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-200  cursor-pointer
+                    ${activeItemId === item.id
+                      ? 'bg-sky-200 text-sky-900 shadow-inner '
+                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
+                    }
+                  `}
+                >
+                  <item.icon className="h-7 w-7" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="text-slate-500 transition-colors hover:text-slate-900">
+          <button className="flex h-14 w-14 items-center justify-center rounded-2xl hover:bg-slate-100">
+            <Cog6ToothIcon className="h-7 w-7" />
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

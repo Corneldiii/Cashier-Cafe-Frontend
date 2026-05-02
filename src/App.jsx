@@ -5,6 +5,7 @@ import Menu from "./page/Menu"
 import Sellings from './page/Sellings'
 import Storage from './page/Storage'  
 import Kitchen from './page/Kitchen'  
+import Users from './page/Employee'  
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path= "/Sellings" element={<Sellings/>}/>
         <Route path= "/Storage" element={<Storage/>}/>
         <Route path= "/Kitchen" element={<Kitchen/>}/>
+        <Route path= "/Users" element={<Users/>}/>
       </Routes>
     </Router>
   )
