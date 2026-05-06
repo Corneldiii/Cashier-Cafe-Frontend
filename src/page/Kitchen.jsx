@@ -9,6 +9,18 @@ import {
     PlayIcon,
     HandThumbUpIcon
 } from '@heroicons/react/24/outline';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+const echo = new Echo({
+    broadcaster: 'reverb',
+    key: '1nw8pvfttvgig0fzoyyd',
+    wsHost: '127.0.0.1',
+    wsPort: 8080,
+    forceTLS: false,
+    enabledTransports: ['ws', 'wss'],
+});
 
 const Kitchen = () => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -21,12 +33,33 @@ const Kitchen = () => {
         return () => clearInterval(timer);
     }, [])
 
+
+    useEffect(() => {
+        echo.connector.pusher.connection.bind('connected', () => {
+            console.log('✅ Terhubung ke Reverb!');
+        });
+
+        echo.connector.pusher.connection.bind('error', (err) => {
+            console.error('❌ Error koneksi:', err);
+        });
+
+        echo.connector.pusher.connection.bind('state_change', (states) => {
+            console.log('🔄 State:', states.previous, '->', states.current);
+        });
+
+        const channel = echo.channel('kitchen-channel');
+
+        channel.listen('OrderCreated', (data) => {
+            console.log('pesanan masuk coy', data.order);
+        });
+    }, []);
+
     return (
         <div>
             <Navbar pageID={4} />
             <div className="w-full h-full">
                 <div className="w-[96%] h-screen overflow-x-hidden scroll-smooth ml-0 md:ml-14 lg:ml-20 flex flex-col">
-                    
+
                     {/* Banner INCOMING ORDER */}
                     <div className="w-full md:w-[95%] h-fit md:h-25 mt-5 md:mt-10 bg-sky-400 p-3 md:p-5 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
                         <div className="flex gap-3 md:gap-10 justify-start items-center flex-wrap">
@@ -83,22 +116,22 @@ const Kitchen = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-full md:w-fit h-full p-3 md:p-5 px-3 md:px-15 flex justify-start md:justify-end items-center">
-                            <div className="w-full md:w-[50%] h-full flex justify-between items-center gap-3 md:gap-5">
+                        <div className="w-full md:w-full h-full p-3 md:p-5 px-3 md:px-15 flex justify-start md:justify-end items-center     ">
+                            <div className="w-full md:w-[25%] h-full flex justify-between  items-center gap-3 md:gap-5">
                                 <div className="h-fit w-fit relative">
                                     <BellIcon className='size-8 md:size-10 text-black/40 cursor-pointer' />
                                     <div className="absolute w-4 h-4 md:w-5 md:h-5 bg-blue-500 top-0 right-0 text-white flex justify-center items-center rounded-full">
                                         <h1 className='text-xs font-jakarta font-semibold'>3</h1>
                                     </div>
                                 </div>
-                                <input type="search" name="searchOrder" placeholder='search order id' className='w-full h-8 md:h-full border-solid border-2 border-black/20 rounded-xl font-jakarta font-semibold text-black/40 text-sm md:text-base' id="" />
+                                <input type="search" name="searchOrder" placeholder='search order id' className='w-fit h-8 md:h-full border-solid border-2 border-black/20 rounded-xl font-jakarta font-semibold text-black/40 text-sm md:text-base' id="" />
                             </div>
                         </div>
                     </div>
 
                     {/* Order Cards Grid */}
                     <div className="w-full h-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 p-3 md:p-5 gap-3 md:gap-4 justify-items-center">
-                        
+
                         {/* Card 1 */}
                         <div className="w-full md:w-full lg:w-90 h-fit rounded-xl border-2 border-solid border-black/15 flex flex-col">
                             <div className="w-full h-fit">
@@ -111,7 +144,7 @@ const Kitchen = () => {
                                 <div className="w-full h-fit flex justify-between items-center px-3 md:px-5 py-2 md:py-3">
                                     <div className="w-fit h-fit flex justify-between items-center gap-2 md:gap-3">
                                         <UserIcon className='size-5 md:size-6 text-black/55' />
-                                        <h1 className='font-jakarta font-semibold text-base md:text-lg text-black/55'>Eyra</h1>
+                                        <h1 className='font-jakarta f   ont-semibold text-base md:text-lg text-black/55'>Eyra</h1>
                                     </div>
                                     <div className="w-fit h-fit flex justify-between items-center gap-2 md:gap-3">
                                         <ClockIcon className='size-5 md:size-6 text-black/55' />
