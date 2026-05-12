@@ -47,34 +47,35 @@ const Navbar = ({ pageID }) => {
   const [activeItemId, setActiveItemId] = useState(pageID);
   const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState();
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [cookies, setCookie, removeCookie] = useCookies(['token','role']);
   const filteredMenu = menuItems.filter(item =>
-    item.roles.includes(users?.role)
+    item.roles.includes(cookies.role)
   );
 
-  useEffect(() => {
-    setLoading(true)
-    const fetchUser = async () => {
-      try {
-        const res = await api.get("/me");
-        setUsers(res.data);
-        setInterval(() => {
-          setLoading(false)
-        }, 1000)
-      } catch (err) {
-        console.log(err);
-        navigate('/');
-      }
-    };
+  // useEffect(() => {
+  //   setLoading(true)
+  //   const fetchUser = async () => {
+  //     try {
+  //       const res = await api.get("/me");
+  //       setUsers(res.data);
+  //       setInterval(() => {
+  //         setLoading(false)
+  //       }, 1000)
+  //     } catch (err) {
+  //       console.log(err);
+  //       navigate('/');
+  //     }
+  //   };
 
-    fetchUser();
-  }, []);
+  //   fetchUser();
+  // }, []);
 
   const logOut = () => {
     const token = cookies.token;
 
     if(token){
       removeCookie('token')
+      removeCookie('role')
       navigate('/')
     }
   }
