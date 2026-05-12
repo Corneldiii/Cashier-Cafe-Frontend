@@ -1,67 +1,172 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff, Coffee, User, Lock } from 'lucide-react';
 import '../index.css';
+import api from '../api/axios';
+import Loading from '../components/Loading';
 
 function login() {
-    const [greatings, setGreating] = useState('');
-    const [email, setEmail] = useState('');
+    const navigate = useNavigate();
+
+    // State Management
+    const [greeting, setGreeting] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    const [users, setUsers] = useState()
 
     useEffect(() => {
         const hours = new Date().getHours();
-
         if (hours >= 5 && hours <= 11) {
-            setGreating("Selamat Pagi !!")
+            setGreeting("Selamat Pagi !!");
         } else if (hours > 11 && hours <= 14) {
-            setGreating("Selamat Siang !!")
+            setGreeting("Selamat Siang !!");
         } else if (hours > 14 && hours <= 18) {
-            setGreating("Selamat Sore !!")
+            setGreeting("Selamat Sore !!");
         } else {
-            setGreating("Selamat Malam !!")
+            setGreeting("Selamat Malam !!");
         }
     }, []);
 
+    useEffect(() => {
+        if (cookies.token) {
+            const fetchMe = async () => {
+                try {
+                    const res = await api.get('/me');
+                    const user = res.data;
+                    if (user.role === "kasir" || user.role === "owner") {
+                        navigate("/Menu");
+                    } else if (user.role === "kitchen") {
+                        navigate("/Kitchen");
+                    }
+                } catch (error) {
+                    removeCookie('token');
+                }
+            };
+            fetchMe();
+        }
+    }, []);
 
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setErrorMsg('');
 
+        try {
+            const res = await api.post('/login', { username, password });
+
+            if (res.data && res.data.token) {
+                localStorage.setItem('token', res.data.token);
+                setCookie('token', res.data.token, { path: '/', maxAge: 604800 })
+                const userRole = res.data.user.role;
+
+                if (userRole === "kasir" || userRole === "owner") {
+                    navigate("/Menu");
+                } else if (userRole === "kitchen") {
+                    navigate("/Kitchen");
+                }
+            }
+        } catch (error) {
+            setErrorMsg(error.response?.data?.message || "Kredensial tidak valid. Silakan coba lagi.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <>
-            <div className="w-screen h-screen bg-white flex justify-center items-center p-5 lg:p-0">
-                <div className="bg-blue-100 w-full h-full lg:w-150 lg:h-fit lg:rounded-4xl rounded-t-4xl lg:shadow-2xl lg:p-10 flex flex-col items-center lg:gap-5">
-                    <h1 className='lg:text-4xl lg:font-bold text-blue-900'>{greatings}</h1>
-                    <h1 className='lg:text-3xl font-extrabold text-blue-900 '> L O G I N </h1>
+            <Loading isLoading={isLoading} />
 
-                    <div id="input" className='flex flex-col justify-center items-center mt-15 w-full h-fit gap-8'>
+            {/* Background Wrapper - Dibuat secerah dan selembut mungkin menyerupai cahaya ruangan */}
+            <div className="min-h-screen w-full flex justify-center items-center p-4 relative overflow-hidden bg-linear-to-br from-white via-sky-100 to-sky-600">
 
+                {/* Efek Cahaya / Bokeh di Background */}
+                <div className="absolute top-[-20%] left-[-10%] w-125 h-125 bg-sky-200/40 rounded-full mix-blend-multiply filter blur-[80px] opacity-70"></div>
+                <div className="absolute bottom-[-20%] right-[-10%] w-150 h-150 bg-white/60 rounded-full filter blur-[100px] opacity-80"></div>
+                <div className="absolute top-[20%] right-[10%] w-75 h-75 bg-sky-100/50 rounded-full filter blur-[60px] opacity-60"></div>
 
-                        <input type="email" name="" className='w-full lg:h-15 lg:rounded-2xl bg-white text-bold text-center text-gray-600 lg:p-5' placeholder='Username' id="username"
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                            }}
-                        />
-                        <div className="relative w-full lg:h-15 ">
-                            <input type="password" name="" className=' w-full lg:h-15 lg:rounded-2xl bg-white text-bold text-center text-gray-600 lg:p-5' placeholder='password' id="password"
-                                onChange={(e) => {
-                                    setPassword(e.target.value);
-                                }}
+                <div className="relative w-full max-w-md bg-white/40 backdrop-blur-xl rounded-[2.5rem] shadow-[0_8px_32px_0_rgba(186,230,253,0.3)] border border-white/60 p-8 sm:p-10 flex flex-col items-center z-10">
 
-                            />
-                            <div className="absolute lg:top-4 lg:right-5 cursor-pointer">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
-                                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z" />
-                                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829" />
-                                    <path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z" />
-                                </svg>
-                            </div>
+                    <div className="flex flex-col items-center w-full mb-8">
+                        <div className="w-20 h-20 bg-linear-to-br from-white to-sky-50 rounded-full flex items-center justify-center text-sky-400 mb-4 shadow-[0_4px_20px_0_rgba(125,211,252,0.4)] border border-white">
+                            <Coffee size={36} strokeWidth={2} />
                         </div>
-
-                        <button type="submit" className='w-full lg:h-15 bg-red-700 rounded-2xl text-white cursor-pointer hover:shadow-inner lg:shadow-black'>Sign In</button>
+                        <div className="px-4 py-1 bg-sky-100/50 text-sky-500 text-xs font-bold tracking-widest uppercase rounded-full mb-3 border border-sky-200/50">
+                            CasierCafe POS
+                        </div>
+                        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-700 text-center mb-1">{greeting}</h1>
+                        <p className="text-slate-500 text-sm text-center">Silakan masuk untuk memulai *shift* Anda</p>
                     </div>
 
-                </div>
+                    {errorMsg && (
+                        <div className="w-full p-3 mb-5 bg-white/50 backdrop-blur-sm border border-red-200 text-red-500 text-sm font-medium rounded-2xl text-center shadow-sm">
+                            {errorMsg}
+                        </div>
+                    )}
 
+                    <form onSubmit={handleLogin} className="w-full flex flex-col gap-5">
+
+                        {/* Input Username */}
+                        <div className="relative flex items-center w-full">
+                            <div className="absolute left-4 text-sky-400/70">
+                                <User size={20} />
+                            </div>
+                            <input
+                                type="text"
+                                required
+                                value={username}
+                                className="w-full h-14 rounded-full bg-white/50 border border-white/80 text-slate-700 pl-12 pr-5 focus:outline-none focus:bg-white focus:border-sky-300 focus:ring-4 focus:ring-sky-100 transition-all shadow-sm placeholder:text-slate-400"
+                                placeholder="Username kasir / kitchen"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+
+                        {/* Input Password */}
+                        <div className="relative flex items-center w-full">
+                            <div className="absolute left-4 text-sky-400/70">
+                                <Lock size={20} />
+                            </div>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                required
+                                value={password}
+                                className="w-full h-14 rounded-full bg-white/50 border border-white/80 text-slate-700 pl-12 pr-12 focus:outline-none focus:bg-white focus:border-sky-300 focus:ring-4 focus:ring-sky-100 transition-all shadow-sm placeholder:text-slate-400"
+                                placeholder="Password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-4 text-sky-400/70 hover:text-sky-500 transition-colors p-1"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
+
+                        {/* Spacer & Lupa Password (Opsional) */}
+                        <div className="flex justify-end w-full px-2 -mt-2">
+                            <span className="text-xs font-medium text-sky-500 hover:text-sky-600 cursor-pointer transition-colors">
+                                Butuh bantuan?
+                            </span>
+                        </div>
+
+                        {/* Tombol Login */}
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full h-14 mt-2 bg-linear-to-r from-sky-400 to-sky-300 hover:from-sky-500 hover:to-sky-400 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 text-white font-bold text-lg rounded-full shadow-[0_8px_20px_0_rgba(56,189,248,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                            {isLoading ? 'Menyeduh Data...' : 'Mulai Sesi'}
+                        </button>
+                    </form>
+                </div>
             </div>
         </>
-    )
+    );
 }
 
-export default login
+export default login;
