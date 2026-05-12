@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import {
   HomeIcon,
   ClockIcon,
@@ -7,12 +8,14 @@ import {
   UserIcon,
   Cog6ToothIcon,
   CubeIcon,
+  ArrowLeftEndOnRectangleIcon,
   FireIcon,
   UsersIcon,
   Bars3Icon, // Ditambahkan untuk icon Hamburger
   XMarkIcon  // Ditambahkan untuk icon Close
 } from '@heroicons/react/24/outline';
-
+import api from '../api/axios'
+import Loading from '../components/Loading';
 const MoonStarIcon = ({ className }) => (
   <svg
     viewBox="0 0 24 24"
@@ -28,22 +31,54 @@ const MoonStarIcon = ({ className }) => (
   </svg>
 );
 
+
 const menuItems = [
-  { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu' },
-  { name: 'History', icon: CubeIcon, id: 2, path: '/Storage' },
-  { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings' },
-  { name: 'Kitchen', icon: FireIcon, id: 4, path:'/Kitchen' },
-  { name: 'Users', icon: UsersIcon, id: 5, path:'/Users' },
+  { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu', roles: ['admin', 'owner', 'kasir'] },
+  { name: 'History', icon: CubeIcon, id: 2, path: '/Storage', roles: ['admin', 'owner', 'kasir'] },
+  { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings', roles: ['admin', 'owner','kasir'] },
+  { name: 'Kitchen', icon: FireIcon, id: 4, path: '/Kitchen', roles: ['admin', 'kitchen'] },
+  { name: 'Users', icon: UsersIcon, id: 5, path: '/Users', roles: ['admin'] },
 ];
 
-const Navbar = ({pageID}) => {
+
+const Navbar = ({ pageID }) => {
   const navigate = useNavigate()
+  const [isLoading, setLoading] = useState(false)
   const [activeItemId, setActiveItemId] = useState(pageID);
-  const [isOpen, setIsOpen] = useState(false); // State baru untuk hamburger menu
+  const [isOpen, setIsOpen] = useState(false);
+  const [users, setUsers] = useState();
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const filteredMenu = menuItems.filter(item =>
+    item.roles.includes(users?.role)
+  );
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchUser = async () => {
+      try {
+        const res = await api.get("/me");
+        setUsers(res.data);
+        setInterval(() => {
+          setLoading(false)
+        }, 1000)
+      } catch (err) {
+        console.log(err);
+        navigate('/');
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // const logOut = () => {
+  //   localStorage.removeItem('token');
+  //   removeCookie('token')
+  //   navigate('/')
+  // }
 
   return (
     <>
-      {/* Tombol Hamburger: Muncul HANYA di layar kecil (HP) */}
+      <Loading isLoading={isLoading} />
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-md border border-slate-200 text-slate-500 md:hidden"
@@ -51,31 +86,27 @@ const Navbar = ({pageID}) => {
         {isOpen ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
       </button>
 
-      {/* Background Overlay transparan untuk menutup menu ketika layar diluar sidebar di klik (Mobile Only) */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 z-30 bg-black/20 md:hidden" 
+        <div
+          className="fixed inset-0 z-30 bg-black/20 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
-
-      {/* Sidebar Utama: Ditambahkan efek transisi slide (translate-x) untuk HP, dan tetap normal (md:translate-x-0) di PC */}
       <div className={`fixed left-0 top-0 z-40 flex h-screen w-20 flex-col items-center justify-between border-r border-slate-200 bg-white py-8 transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        
-        {/* Margin top ditambahkan sedikit di versi HP (mt-12) agar tidak tertabrak tombol X */}
+
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-100 text-sky-800 mt-12 md:mt-0">
           <MoonStarIcon className="h-7 w-7" />
         </div>
-        
+
         <nav className="flex-1 pt-16">
           <ul className="flex flex-col items-center space-y-7">
-            {menuItems.map((item) => (
+            {filteredMenu.map((item) => (
               <li key={item.id}>
                 <button
                   onClick={() => {
                     setActiveItemId(item.id);
                     navigate(item.path);
-                    setIsOpen(false); // Menutup sidebar otomatis saat menu dipilih di HP
+                    setIsOpen(false);
                   }}
                   className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-200  cursor-pointer
                     ${activeItemId === item.id
@@ -92,8 +123,12 @@ const Navbar = ({pageID}) => {
         </nav>
 
         <div className="text-slate-500 transition-colors hover:text-slate-900">
-          <button className="flex h-14 w-14 items-center justify-center rounded-2xl hover:bg-slate-100">
-            <Cog6ToothIcon className="h-7 w-7" />
+          <button className="flex h-14 w-14 items-center justify-center rounded-2xl hover:bg-slate-100"
+            // onClick={() => {logOut()}}
+          >
+            <ArrowLeftEndOnRectangleIcon className="h-7 w-7"
+
+            />
           </button>
         </div>
       </div>
