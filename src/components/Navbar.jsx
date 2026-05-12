@@ -34,7 +34,7 @@ const MoonStarIcon = ({ className }) => (
 
 const menuItems = [
   { name: 'Home', icon: HomeIcon, id: 1, path: '/Menu', roles: ['admin', 'owner', 'kasir'] },
-  { name: 'History', icon: CubeIcon, id: 2, path: '/Storage', roles: ['admin', 'owner', 'kasir'] },
+  { name: 'History', icon: CubeIcon, id: 2, path: '/Storage', roles: ['admin', 'owner', 'kasir','kitchen'] },
   { name: 'Reports', icon: ChartBarIcon, id: 3, path: '/Sellings', roles: ['admin', 'owner','kasir'] },
   { name: 'Kitchen', icon: FireIcon, id: 4, path: '/Kitchen', roles: ['admin', 'kitchen'] },
   { name: 'Users', icon: UsersIcon, id: 5, path: '/Users', roles: ['admin'] },
@@ -70,11 +70,14 @@ const Navbar = ({ pageID }) => {
     fetchUser();
   }, []);
 
-  // const logOut = () => {
-  //   localStorage.removeItem('token');
-  //   removeCookie('token')
-  //   navigate('/')
-  // }
+  const logOut = () => {
+    const token = cookies.token;
+
+    if(token){
+      removeCookie('token')
+      navigate('/')
+    }
+  }
 
   return (
     <>
@@ -124,7 +127,7 @@ const Navbar = ({ pageID }) => {
 
         <div className="text-slate-500 transition-colors hover:text-slate-900">
           <button className="flex h-14 w-14 items-center justify-center rounded-2xl hover:bg-slate-100"
-            // onClick={() => {logOut()}}
+            onClick={() => {logOut()}}
           >
             <ArrowLeftEndOnRectangleIcon className="h-7 w-7"
 

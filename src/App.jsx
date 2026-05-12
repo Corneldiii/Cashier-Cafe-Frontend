@@ -8,21 +8,26 @@ import Kitchen from './page/Kitchen'
 import Users from './page/Employee'
 import ProtectedRoute from './ProtectedRoute';
 import api from './api/axios'
+import Cookies from 'js-cookie';
 
 
 const App = () => {
   const [users, setUser] = useState();
 
   useEffect(() => {
-    const fetchMe = async () => {
-      try {
-        const res = await api.get('/me');
-        setUser(res.data);
-      } catch (error) {
-        setUser(null);
+    console.log(Cookies.get('token'))
+    if (Cookies.get('token')) {
+      const fetchMe = async () => {
+        try {
+          const res = await api.get('/me');
+          setUser(res.data);
+          console.log(users)
+        } catch (error) {
+          setUser(null);
+        }
       }
+      fetchMe()
     }
-    fetchMe()
   }, [])
 
 

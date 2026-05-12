@@ -39,9 +39,9 @@ function login() {
                     const res = await api.get('/me');
                     const user = res.data;
                     if (user.role === "kasir" || user.role === "owner") {
-                        navigate("/Menu");
+                        navigate("/Menu",{ replace: true });
                     } else if (user.role === "kitchen") {
-                        navigate("/Kitchen");
+                        navigate("/Kitchen",{ replace: true });
                     }
                 } catch (error) {
                     removeCookie('token');
@@ -49,7 +49,7 @@ function login() {
             };
             fetchMe();
         }
-    }, []);
+    }, [cookies.token]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -60,13 +60,13 @@ function login() {
             const res = await api.post('/login', { username, password });
 
             if (res.data && res.data.token) {
-                localStorage.setItem('token', res.data.token);
                 setCookie('token', res.data.token, { path: '/', maxAge: 604800 })
                 const userRole = res.data.user.role;
 
                 if (userRole === "kasir" || userRole === "owner") {
-                    navigate("/Menu");
+                    navigate("/Menu");  
                 } else if (userRole === "kitchen") {
+                    console.log(userRole)
                     navigate("/Kitchen");
                 }
             }
