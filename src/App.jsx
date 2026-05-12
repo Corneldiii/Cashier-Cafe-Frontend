@@ -9,27 +9,35 @@ import Users from './page/Employee'
 import ProtectedRoute from './ProtectedRoute';
 import api from './api/axios'
 import Cookies from 'js-cookie';
+import { useCookies } from 'react-cookie';
+
+
 
 
 const App = () => {
   const [users, setUser] = useState();
+  const [loading, setLoading] = useState(true);
+  const [cookies] = useCookies(['token','role']);
 
   useEffect(() => {
-    console.log(Cookies.get('token'))
-    if (Cookies.get('token')) {
-      const fetchMe = async () => {
-        try {
-          const res = await api.get('/me');
-          setUser(res.data);
-          console.log(users)
-        } catch (error) {
-          setUser(null);
-        }
-      }
-      fetchMe()
+    if (!cookies.token) {
+      setLoading(false);
+      return;
     }
-  }, [])
+    const fetchMe = async () => {
+      try {
+        const res = await api.get('/me');
+        setUser(res.data);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMe();
+  }, []);
 
+  if (loading) return null;
 
   return (
     <Router>

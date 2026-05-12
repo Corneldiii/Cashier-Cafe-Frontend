@@ -16,7 +16,7 @@ function login() {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    const [cookies, setCookie, removeCookie] = useCookies(['token','role']);
     const [users, setUsers] = useState()
 
     useEffect(() => {
@@ -33,21 +33,12 @@ function login() {
     }, []);
 
     useEffect(() => {
-        if (cookies.token) {
-            const fetchMe = async () => {
-                try {
-                    const res = await api.get('/me');
-                    const user = res.data;
-                    if (user.role === "kasir" || user.role === "owner") {
-                        navigate("/Menu",{ replace: true });
-                    } else if (user.role === "kitchen") {
-                        navigate("/Kitchen",{ replace: true });
-                    }
-                } catch (error) {
-                    removeCookie('token');
-                }
-            };
-            fetchMe();
+        if (!cookies.token) return; 
+        const userRole = cookies.role; 
+        if (userRole === "kasir" || userRole === "owner") {
+            navigate("/Menu", { replace: true });
+        } else if (userRole === "kitchen") {
+            navigate("/Kitchen", { replace: true });
         }
     }, [cookies.token]);
 
@@ -61,14 +52,7 @@ function login() {
 
             if (res.data && res.data.token) {
                 setCookie('token', res.data.token, { path: '/', maxAge: 604800 })
-                const userRole = res.data.user.role;
-
-                if (userRole === "kasir" || userRole === "owner") {
-                    navigate("/Menu");  
-                } else if (userRole === "kitchen") {
-                    console.log(userRole)
-                    navigate("/Kitchen");
-                }
+                setCookie('role', res.data.user.role, { path: '/', maxAge: 604800 });
             }
         } catch (error) {
             setErrorMsg(error.response?.data?.message || "Kredensial tidak valid. Silakan coba lagi.");
