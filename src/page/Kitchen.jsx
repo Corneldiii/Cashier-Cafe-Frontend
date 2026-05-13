@@ -15,7 +15,6 @@ import Pusher from 'pusher-js';
 import api from '../api/axios';
 import Loading from '../components/Loading'
 
-// Setup Laravel Echo & Pusher
 window.Pusher = Pusher;
 const echo = new Echo({
     broadcaster: 'reverb',

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { 
-  Package, 
-  Archive, 
-  Layers, 
-  AlertCircle, 
-  Clock, 
-  Calendar, 
-  Droplet, 
-  MapPin, 
+import {
+  Package,
+  Archive,
+  Layers,
+  AlertCircle,
+  Clock,
+  Calendar,
+  Droplet,
+  MapPin,
   CheckCircle2
 } from 'lucide-react';
 
@@ -35,7 +35,7 @@ const Storage = () => {
 
   return (
     <div className="min-h-screen w-full bg-linear-to-br from-white via-sky-50 to-sky-100 flex flex-col relative overflow-hidden">
-      
+
       {/* Dekorasi Background Ambient */}
       <div className="absolute top-[-10%] left-[-10%] w-125 h-125 bg-sky-200/40 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 pointer-events-none z-0"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-150 h-150 bg-white/60 rounded-full filter blur-[100px] opacity-80 pointer-events-none z-0"></div>
@@ -44,14 +44,14 @@ const Storage = () => {
 
       {/* Main Container - Ditambahkan lg:pl-26 agar tidak tertutup Navbar */}
       <div className="flex flex-col w-full lg:pl-26 lg:pr-6 py-6 px-4 z-10 gap-6">
-        
+
         {/* === HEADER GLASSMORPHISM === */}
         <div className="w-full bg-white/40 backdrop-blur-xl border border-white/60 shadow-sm rounded-4xl p-6 lg:px-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
           <div>
             <h2 className="text-sky-500 font-bold tracking-widest uppercase text-sm mb-1">Gudang & Inventaris</h2>
             <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-700 tracking-tight">Logistics Management</h1>
           </div>
-          
+
           <div className="flex flex-col items-start lg:items-end gap-1">
             <div className="flex items-center gap-2 text-3xl font-bold text-slate-700 font-mono">
               <Clock className="text-sky-400 mr-1" size={28} />
@@ -66,7 +66,7 @@ const Storage = () => {
 
         {/* === SUMMARY CARDS (Grid Responsif) === */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          
+
           {/* Card 1 */}
           <div className="bg-white/60 backdrop-blur-xl rounded-4xl shadow-sm border border-white/60 p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
             <div className="w-16 h-16 bg-sky-100 rounded-2xl flex justify-center items-center shrink-0">
@@ -114,12 +114,12 @@ const Storage = () => {
               <h1 className="text-xs text-slate-400 mt-1">Kosong</h1>
             </div>
           </div>
-          
+
         </div>
 
         {/* === MAIN CONTENT (Tabel & Detail Sidebar) === */}
         <div className="flex flex-col lg:flex-row w-full gap-6 mt-2">
-          
+
           {/* KIRI: AREA TABEL */}
           <div className="flex-1 min-h-125 bg-white/40 backdrop-blur-xl rounded-4xl shadow-[0_8px_32px_0_rgba(186,230,253,0.3)] border border-white/60 p-6 flex flex-col">
             <h2 className="text-xl font-bold text-slate-700 mb-6">Daftar Inventaris</h2>
@@ -127,16 +127,31 @@ const Storage = () => {
               Render komponen Tabel kamu di sini:
               <Table columns={columns} data={data} /> 
             */}
-            <div className="w-full flex-1 border-2 border-dashed border-sky-200 rounded-2xl flex items-center justify-center text-sky-400 font-medium">
-              Area Tabel Data Ditempatkan di Sini
+            <div className="w-full flex-1 border-2 border-dashed border-sky-200 rounded-2xl flex text-sky-400 font-medium">
+              <div className="w-full overflow-x-auto rounded-2xl border border-white/80 bg-white/30 backdrop-blur-sm shadow-inner scrollbar-hide">
+                <table className="w-full text-left border-collapse min-w-200">
+                  <thead>
+                    <tr className="bg-white/50 text-slate-500 text-sm border-b border-white/80">
+                      <th className="px-5 py-4 font-semibold whitespace-nowrap rounded-tl-2xl">Item Name</th>
+                      <th className="px-5 py-4 font-semibold whitespace-nowrap">QTY</th>
+                      <th className="px-5 py-4 font-semibold whitespace-nowrap">Unit</th>
+                      <th className="px-5 py-4 font-semibold whitespace-nowrap text-center">Status</th>
+                      <th className="px-5 py-4 font-semibold whitespace-nowrap rounded-tr-2xl">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
           {/* KANAN: SIDEBAR DETAIL ITEM */}
           <div className="w-full lg:w-87.5 xl:w-100 flex flex-col gap-6 shrink-0">
-            
+
             <div className="w-full bg-white/60 backdrop-blur-xl rounded-4xl shadow-[0_8px_32px_0_rgba(186,230,253,0.3)] border border-white/60 p-6">
-              
+
               {/* Header Detail */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-sky-100 rounded-2xl flex justify-center items-center shrink-0">
@@ -162,7 +177,7 @@ const Storage = () => {
               {/* Stock Information */}
               <div className="flex flex-col gap-4">
                 <h2 className="font-bold text-slate-700 mb-2">Informasi Stok</h2>
-                
+
                 <div className="flex justify-between items-center bg-white/50 p-3 rounded-xl border border-sky-50">
                   <span className="font-medium text-slate-500 text-sm">Stok Saat Ini</span>
                   <div className="flex items-center gap-1 font-bold text-slate-700">
@@ -207,7 +222,7 @@ const Storage = () => {
 
             {/* Kotak Kosong Ekstra (Seperti kode aslimu h-130) */}
             <div className="w-full min-h-62.5 flex-1 bg-white/40 backdrop-blur-xl rounded-4xl shadow-[0_8px_32px_0_rgba(186,230,253,0.3)] border border-white/60 p-6 flex flex-col items-center justify-center">
-               <span className="text-sky-300 font-medium text-sm text-center">Area Detail Tambahan<br/>(Histori, Riwayat Masuk/Keluar)</span>
+              <span className="text-sky-300 font-medium text-sm text-center">Area Detail Tambahan<br />(Histori, Riwayat Masuk/Keluar)</span>
             </div>
 
           </div>
