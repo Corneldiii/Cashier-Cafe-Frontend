@@ -46,8 +46,8 @@ const AddToCartModal = ({ isOpen, onClose, menu, onAdd }) => {
         style={{ animation: 'modalIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both' }}
         onClick={e => e.stopPropagation()}
       >
-        {/* Header Gradient */}
-        <div className="relative bg-gradient-to-br from-sky-400/90 to-sky-500/90 px-6 pt-6 pb-10">
+        {/* Header linear */}
+        <div className="relative bg-linear-to-br from-sky-400/90 to-sky-500/90 px-6 pt-6 pb-10">
           {/* Dekorasi */}
           <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white/10 rounded-full pointer-events-none" />
           <div className="absolute bottom-[-14px] left-[25%] w-24 h-24 bg-white/10 rounded-full pointer-events-none" />
@@ -154,7 +154,7 @@ const AddToCartModal = ({ isOpen, onClose, menu, onAdd }) => {
           {/* Tombol Tambah */}
           <button
             onClick={handleAdd}
-            className="w-full py-4 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white font-bold text-base rounded-2xl shadow-[0_4px_16px_0_rgba(14,165,233,0.35)] hover:shadow-[0_6px_20px_0_rgba(14,165,233,0.45)] transition-all duration-200 cursor-pointer"
+            className="w-full py-4 bg-linear-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white font-bold text-base rounded-2xl shadow-[0_4px_16px_0_rgba(14,165,233,0.35)] hover:shadow-[0_6px_20px_0_rgba(14,165,233,0.45)] transition-all duration-200 cursor-pointer"
           >
             Tambahkan ke Pesanan
           </button>
@@ -358,7 +358,7 @@ const Menu = () => {
           <button
             disabled={cart.length === 0 || name === ''}
             onClick={payNow}
-            className="w-full h-14 mt-6 bg-gradient-to-r from-sky-400 to-sky-300 hover:from-sky-500 hover:to-sky-400 disabled:from-slate-200 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold text-lg rounded-full shadow-[0_8px_20px_0_rgba(56,189,248,0.4)] disabled:shadow-none transition-all cursor-pointer"
+            className="w-full h-14 mt-6 bg-linear-to-r from-sky-400 to-sky-300 hover:from-sky-500 hover:to-sky-400 disabled:from-slate-200 disabled:to-slate-300 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-bold text-lg rounded-full shadow-[0_8px_20px_0_rgba(56,189,248,0.4)] disabled:shadow-none transition-all cursor-pointer"
           >
             Proses Pembayaran
           </button>
@@ -368,7 +368,7 @@ const Menu = () => {
         <div className="flex-1 h-full bg-white/40 backdrop-blur-xl rounded-4xl shadow-[0_8px_32px_0_rgba(186,230,253,0.3)] border border-white/60 flex flex-col p-6 overflow-hidden">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-4 mb-6">
             <div className="flex gap-2 overflow-x-auto w-full lg:w-auto scrollbar-hide pb-2 lg:pb-0">
-              {['Semua', 'Coffee', 'Tea', 'Milk Shake', 'Pastries', 'Snack', 'Heavy Meal'].map((cat, i) => (
+              {['Semua', 'Drink', 'Food', 'Snack'].map((cat, i) => (
                 <button
                   key={i}
                   onClick={() => filterByCategory(cat)}
